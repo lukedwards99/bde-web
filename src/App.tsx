@@ -1,11 +1,13 @@
 import kyleImage from './assets/kyle-douglas.jpeg'
 import lukeImage from './assets/luke-edwards.jpeg'
+import andrewImage from './assets/andy-buckwinkler.jpeg'
 import TransformationCarousel from './TransformationCarousel'
 import { transformations } from './transformations'
 
 const trainers = [
   {
     name: 'Luke Edwards',
+    role: 'Co-founder · Head trainer',
     image: lukeImage,
     alt: 'Luke Edwards competing on a bodybuilding stage',
     specialties: ['Strength training', 'Bodybuilding', 'Nutrition'],
@@ -13,10 +15,19 @@ const trainers = [
   },
   {
     name: 'Kyle Douglas',
+    role: 'Co-founder · Head trainer',
     image: kyleImage,
     alt: 'Kyle Douglas showing his athletic physique',
     specialties: ['Athletic performance', 'Body composition', 'Functional training'],
     bio: 'Kyle creates personal training plans that meet each client where they are. His experience in bodybuilding and athletic performance, paired with a motivating and detail-focused approach, helps clients keep moving forward.',
+  },
+  {
+    name: 'Andrew Buckwinkler',
+    role: 'Personal trainer',
+    image: andrewImage,
+    alt: 'Andrew Buckwinkler',
+    specialties: ['Weight loss', 'Sustainable habits', 'Personalized programs'],
+    bio: 'Andrew specializes in weight loss, bringing both professional expertise and real-life experience to his coaching. In 2018, he weighed over 300 lbs and transformed his health by setting realistic goals, building sustainable workouts, and learning how differently every body functions. That journey drives his passion for helping others achieve lasting results through personalized programs and sustainable, long-term change.',
   },
 ]
 
@@ -71,7 +82,7 @@ function App() {
           <div className="section-heading">
             <p className="eyebrow">The team</p>
             <h2 id="trainers-title">Meet your trainers.</h2>
-            <p>Two coaches. One shared commitment to thoughtful training and sustainable results.</p>
+            <p>Three coaches. One shared commitment to thoughtful training and sustainable results.</p>
           </div>
 
           <div className="trainer-grid">
@@ -82,7 +93,7 @@ function App() {
                   <span className="trainer-index" aria-hidden="true">0{index + 1}</span>
                 </div>
                 <div className="trainer-content">
-                  <p className="eyebrow">Co-founder · Head trainer</p>
+                  <p className="eyebrow">{trainer.role}</p>
                   <h3>{trainer.name}</h3>
                   <p>{trainer.bio}</p>
                   <ul aria-label={`${trainer.name}'s specialties`}>
