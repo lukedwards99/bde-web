@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Redirecting | BDE P.T.</title>
+  </head>
+  <body>
+    <p>Redirecting…</p>
+    <script>
+      (function () {
+        var productionBase = '/bde-web/'
+        var developmentBase = '/bde-web/dev/'
+        var path = window.location.pathname
+        var base = path.indexOf(developmentBase) === 0 ? developmentBase : productionBase
+        var requestedLocation = path + window.location.search + window.location.hash
+        window.location.replace(base + '?redirect=' + encodeURIComponent(requestedLocation))
+      }())
+    </script>
+  </body>
+</html>
