@@ -1,9 +1,12 @@
 name: Deploy development and production to GitHub Pages
+run-name: Deploy Pages from ${{ github.ref_name }} (${{ github.event_name }})
 
 on:
   push:
-    branches: [main, develop]
-  workflow_dispatch:
+    branches:
+      - main
+      - develop
+  workflow_dispatch: {}
 
 permissions:
   contents: read
