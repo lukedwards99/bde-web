@@ -1,0 +1,5 @@
+“I don’t see myself being special; I just see myself having more responsibilities than the next man.” - Tupac Shakur.
+
+10 weeks out. Pardon the moving mess. Weight is still just above 159. Calories are averaging around 2500 with one 30 minute cardio session. I was expecting my weight to drop a bit more but I am still leaning out at the rate I expect. I did reintroduce creatine a few weeks ago because I was not taking it before. That could be contributing to extra water being held but I have no clue really. I think starting next week I am going to drop another 100 calories a day on average depending. I don’t want to cut too quick but I want to be nice and crispy on show day. Legs are feeling good after my lower body deload. I am thinking of doing a upper body deload this weekend, especially since I will be moving. I am still unsure of what catagory I will compete in. I am currently debating between Classic and Men’s Physique. I am happy with this look for 10 weeks out. Gotta keep my foot on the gas.
+
+#nofilter

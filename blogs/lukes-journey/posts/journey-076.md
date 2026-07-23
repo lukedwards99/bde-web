@@ -1,0 +1,1 @@
+15 days out. At this point it is going to be daily updates until the show. No matter what happens at this point I will be happy. I am the leanest and most muscular I have ever been. I have also learned so much about bodybuilding and health in these past 30 or so weeks I have been training intentionally for this show. Can’t wait till show day! #nofilter

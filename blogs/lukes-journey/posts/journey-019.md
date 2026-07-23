@@ -1,0 +1,1 @@
+“The man who would be my friend must have his own reason for living beyond me, and he should put his heart and soul into protecting that dream. He should never hesitate to defend it, even against me. Some people only see life and death. They are dead, because they have no dreams.” Berserk (1997)

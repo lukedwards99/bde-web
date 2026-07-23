@@ -1,0 +1,3 @@
+18 weeks post show. I am hovering around 171 currently and I have never been this lean at this body weight before. Not much as changed in my training recently. I have been doing a bit higher volume since we are approaching the end of the bulk and I think you can clearly see it is working. Training 6 days a week on a PPL split. My push days have very much biased my chest. It makes me feel quite good to know I can still put on serious gains and I am no where near my ceiling. I think I can say this bulk has been a success. I have decided that I will take a 3-4 week mini cut in September and then will bulk till the end of the year. During the cut I am going to lower my training volume a bit and really focus on my posing. Full steam ahead!
+
+#nofilter

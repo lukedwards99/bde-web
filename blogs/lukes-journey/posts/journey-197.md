@@ -1,0 +1,3 @@
+5 weeks into the cut. 11 weeks till the wedding. As you can see the cut is now well underway. I am down about 15 pounds I would think about half of that is bloat and half of that is actual fat. I’m not sure what it is about this cut, but my appetite has been nonexistent, which is good. Also, I have decided it will be more sustainable to do these post once every two weeks like I have been doing then weekly like I have also done. These posts have been kind of quite a bit of work to ensure they are consistent week to week.  Between posing, editing (cropping and censoring of course no filters), and making the actual post it can take about an hour and a half lol. However, if I am actively prepping, I’ll probably go back to once a week.
+
+#nofilter

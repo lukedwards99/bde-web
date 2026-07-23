@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
@@ -144,5 +144,48 @@ describe('loadBlogContent', () => {
     expect(() => loadBlogContent(root)).toThrowError(/contentFile must name a sibling Markdown file/)
     expect(() => loadBlogContent(root)).toThrowError(/filename must be a lowercase URL slug/)
     expect(() => loadBlogContent(root)).toThrowError(/trainer.id must be a lowercase URL-safe identifier/)
+  })
+
+  it('loads validated media and rejects unsafe or missing public assets', () => {
+    const root = makeProject()
+    const assetDirectory = path.join(root, 'public', 'blog-media', 'safe-blog', 'post-one')
+    mkdirSync(assetDirectory, { recursive: true })
+    writeFileSync(path.join(assetDirectory, '0123456789abcdef.webp'), 'image')
+
+    addBlog(root, 'safe-blog', {
+      title: 'Safe Blog',
+      description: 'Safe.',
+      trainer: { id: 'luke', name: 'Luke' },
+    }, [{
+      slug: 'post-one',
+      metadata: {
+        title: 'Post one',
+        summary: 'Post with media.',
+        publishedDate: '2026-01-01',
+        contentFile: 'post-one.md',
+        media: [{
+          type: 'image',
+          path: 'blog-media/safe-blog/post-one/0123456789abcdef.webp',
+          alt: 'Training photo',
+        }],
+      },
+      content: 'Body.',
+    }])
+
+    expect(loadBlogContent(root)[0].posts[0].media).toEqual([{
+      type: 'image',
+      path: 'blog-media/safe-blog/post-one/0123456789abcdef.webp',
+      alt: 'Training photo',
+    }])
+
+    const metadataPath = path.join(root, 'blogs', 'safe-blog', 'posts', 'post-one.json')
+    const metadata = JSON.parse(readFileSync(metadataPath, 'utf8'))
+    metadata.media[0].path = '../unsafe.webp'
+    writeFileSync(metadataPath, JSON.stringify(metadata))
+    expect(() => loadBlogContent(root)).toThrowError(/safe content-hashed blog-media path/)
+
+    metadata.media[0].path = 'blog-media/safe-blog/post-one/fedcba9876543210.webp'
+    writeFileSync(metadataPath, JSON.stringify(metadata))
+    expect(() => loadBlogContent(root)).toThrowError(/references missing public asset/)
   })
 })

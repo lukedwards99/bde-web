@@ -1,0 +1,1 @@
+“I don’t even know if there is such a thing of justice in the shinobi world. We fight believing we’re on the side of justice, but if the enemy feels the same, how do we know if we are truly right?” Shisui Uchiha (Naruto)

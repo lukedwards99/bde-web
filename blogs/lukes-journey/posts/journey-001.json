@@ -1,0 +1,18 @@
+{
+  "title": "Luke's Journey #1",
+  "summary": "One day I will have a vacuum",
+  "publishedDate": "2023-03-10",
+  "contentFile": "journey-001.md",
+  "media": [
+    {
+      "type": "image",
+      "path": "blog-media/lukes-journey/journey-001/d5fac7f501895ba2.webp",
+      "alt": "Photo 1 of 2 from Luke's Journey #1"
+    },
+    {
+      "type": "image",
+      "path": "blog-media/lukes-journey/journey-001/91d1a665575fcaa3.webp",
+      "alt": "Photo 2 of 2 from Luke's Journey #1"
+    }
+  ]
+}

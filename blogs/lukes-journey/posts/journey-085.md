@@ -1,0 +1,1 @@
+2 days out. I had 16 rice cakes today plus sour candy so I am a very happy man. And you can also tell because I am much fuller and more vascular today than yesterday. I also had my polygraph tonight as well. Time to bring it home! #nofilter (except the last one)

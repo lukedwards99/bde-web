@@ -1,0 +1,1 @@
+“Doing the level of work that leaves me proud regardless of the result” - Chris Bumstead. I can’t believe I am 22 days out. I am pushing harder than ever to dig out just the last little bit of detail and definition. I only have about 2.5ish weeks of hard dieting before I have to begin my peak week process. So I am going to use every day I have left. #nofilter

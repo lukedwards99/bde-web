@@ -1,0 +1,1 @@
+6 weeks out!! Today is the last rest day and refeed day. We start the most aggressive part of the cut tomorrow for the next 5 weeks. I have been holding onto some water and my weight is going heywire so that is making it a bit hard to try my progress. I am also holding some water in my mid section it seems. Still looking good though!

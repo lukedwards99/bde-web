@@ -26,6 +26,18 @@ const blogs: Blog[] = [{
       '',
       '<script>unsafe content</script>',
     ].join('\n'),
+    media: [
+      {
+        type: 'image',
+        path: 'blog-media/lukes-blog/welcome/0123456789abcdef.webp',
+        alt: 'Welcome photo',
+      },
+      {
+        type: 'video',
+        path: 'blog-media/lukes-blog/welcome/fedcba9876543210.mp4',
+        alt: 'Welcome video',
+      },
+    ],
   }],
 }]
 
@@ -65,6 +77,12 @@ describe('blog routes', () => {
     expect(screen.getByRole('table')).toBeInTheDocument()
     expect(screen.getByRole('checkbox')).toBeChecked()
     expect(screen.queryByText('unsafe content')).not.toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'Welcome photo' })).toHaveAttribute(
+      'src',
+      '/blog-media/lukes-blog/welcome/0123456789abcdef.webp',
+    )
+    expect(screen.getByLabelText('Welcome video')).toHaveAttribute('controls')
+    expect(screen.getByText('Swipe or scroll to see the full post.')).toBeInTheDocument()
 
     const breadcrumbs = screen.getByRole('navigation', { name: 'Breadcrumb' })
     expect(within(breadcrumbs).getByRole('link', { name: 'Home' })).toHaveAttribute('href', '/')
@@ -73,6 +91,28 @@ describe('blog routes', () => {
       'href',
       '/blogs/lukes-blog',
     )
+  })
+
+  it('reveals long blog archives twelve posts at a time', async () => {
+    const user = userEvent.setup()
+    const posts = Array.from({ length: 13 }, (_, index) => ({
+      ...blogs[0].posts[0],
+      slug: `post-${index + 1}`,
+      title: `Journey ${index + 1}`,
+      publishedDate: `2026-07-${String(13 - index).padStart(2, '0')}`,
+      media: undefined,
+    }))
+
+    renderAt('/blogs/lukes-blog', [{ ...blogs[0], posts }])
+
+    expect(screen.getByRole('heading', { name: 'Journey 12' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Journey 13' })).not.toBeInTheDocument()
+    expect(screen.getByText('Showing 12 of 13 posts')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: /Load more/ }))
+
+    expect(screen.getByRole('heading', { name: 'Journey 13' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Load more/ })).not.toBeInTheDocument()
   })
 
   it('shows useful empty states for no blogs and no posts', () => {

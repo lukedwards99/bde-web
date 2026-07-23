@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -53,6 +53,14 @@ const formatDate = (date: string) => new Intl.DateTimeFormat('en-US', {
   day: 'numeric',
   timeZone: 'UTC',
 }).format(new Date(`${date}T00:00:00Z`))
+
+const blogMediaBase = (
+  import.meta.env.VITE_BLOG_MEDIA_BASE?.trim()
+  || `${import.meta.env.BASE_URL}blog-media/`
+).replace(/\/?$/, '/')
+
+const blogMediaUrl = (mediaPath: string) =>
+  `${blogMediaBase}${mediaPath.replace(/^blog-media\//, '')}`
 
 function ScrollToLocation() {
   const { pathname, hash } = useLocation()
@@ -278,11 +286,18 @@ function Breadcrumbs({ blog, post }: { blog?: Blog; post?: BlogPost }) {
 function BlogPage({ blogs }: { blogs: Blog[] }) {
   const { blogSlug } = useParams()
   const blog = blogs.find((item) => item.slug === blogSlug)
+  const [visiblePostCount, setVisiblePostCount] = useState(12)
   usePageTitle(blog ? `${blog.title} | BDE P.T.` : 'Blog not found | BDE P.T.')
+
+  useEffect(() => {
+    setVisiblePostCount(12)
+  }, [blogSlug])
 
   if (!blog) {
     return <NotFoundPage kind="blog" />
   }
+
+  const visiblePosts = blog.posts.slice(0, visiblePostCount)
 
   return (
     <main className="content-page">
@@ -293,18 +308,53 @@ function BlogPage({ blogs }: { blogs: Blog[] }) {
         description={blog.description}
       />
       {blog.posts.length > 0 ? (
-        <div className="post-list" aria-label={`Posts from ${blog.title}`}>
-          {blog.posts.map((post) => (
-            <article className="post-card" key={post.slug}>
-              <time dateTime={post.publishedDate}>{formatDate(post.publishedDate)}</time>
-              <h2><Link to={`/blogs/${blog.slug}/${post.slug}`}>{post.title}</Link></h2>
-              <p>{post.summary}</p>
-              <Link className="text-link" to={`/blogs/${blog.slug}/${post.slug}`}>
-                Read article <span aria-hidden="true">→</span>
-              </Link>
-            </article>
-          ))}
-        </div>
+        <>
+          <div className="post-list" aria-label={`Posts from ${blog.title}`}>
+            {visiblePosts.map((post) => {
+              const cover = post.media?.[0]
+              const postUrl = `/blogs/${blog.slug}/${post.slug}`
+
+              return (
+                <article
+                  className={`post-card${cover ? ' post-card-with-cover' : ''}`}
+                  key={post.slug}
+                >
+                  {cover && (
+                    <Link className="post-cover" to={postUrl} tabIndex={-1} aria-hidden="true">
+                      <img
+                        src={blogMediaUrl(cover.path)}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </Link>
+                  )}
+                  <time dateTime={post.publishedDate}>{formatDate(post.publishedDate)}</time>
+                  <h2><Link to={postUrl}>{post.title}</Link></h2>
+                  <p>{post.summary}</p>
+                  <Link className="text-link" to={postUrl}>
+                    Read article <span aria-hidden="true">→</span>
+                  </Link>
+                </article>
+              )
+            })}
+          </div>
+          {visiblePostCount < blog.posts.length && (
+            <div className="load-more">
+              <button
+                className="button"
+                type="button"
+                onClick={() => setVisiblePostCount((count) => count + 12)}
+              >
+                Load more
+                <span aria-hidden="true">↓</span>
+              </button>
+              <p aria-live="polite">
+                Showing {visiblePosts.length} of {blog.posts.length} posts
+              </p>
+            </div>
+          )}
+        </>
       ) : (
         <EmptyState title="No posts yet." message={`${blog.trainer.name} hasn't published a post here yet.`} />
       )}
@@ -331,6 +381,36 @@ function BlogPostPage({ blogs }: { blogs: Blog[] }) {
           <p>{post.summary}</p>
           <time dateTime={post.publishedDate}>Published {formatDate(post.publishedDate)}</time>
         </header>
+        {post.media && (
+          <section className="article-gallery" aria-label={`Media from ${post.title}`}>
+            <div className="article-gallery-track" tabIndex={0}>
+              {post.media.map((media, index) => (
+                <figure className="article-media" key={`${media.path}-${index}`}>
+                  {media.type === 'image' ? (
+                    <img
+                      src={blogMediaUrl(media.path)}
+                      alt={media.alt}
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      decoding="async"
+                    />
+                  ) : (
+                    <video
+                      src={blogMediaUrl(media.path)}
+                      aria-label={media.alt}
+                      controls
+                      playsInline
+                      preload="metadata"
+                    />
+                  )}
+                  <figcaption>{index + 1} / {post.media?.length}</figcaption>
+                </figure>
+              ))}
+            </div>
+            {post.media.length > 1 && (
+              <p className="gallery-hint">Swipe or scroll to see the full post.</p>
+            )}
+          </section>
+        )}
         <div className="markdown-body">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}

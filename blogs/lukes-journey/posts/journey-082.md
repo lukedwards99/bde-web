@@ -1,0 +1,1 @@
+4 days out. This is it. 4 months of prep and years of work all leads to this week. I have begun the peaking process by getting as flat as possible. Carbs are now less than half of what they were before and fats have come up. This has been one of the hardest yet most fulfilling things I have ever done. Time to finish it. #nofilter

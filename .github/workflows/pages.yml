@@ -50,6 +50,7 @@ jobs:
         working-directory: production
         env:
           VITE_APP_ENV: production
+          VITE_BLOG_MEDIA_BASE: /bde-web/blog-media/
         run: npm run build -- --base=/bde-web/
 
       - name: Install development dependencies
@@ -60,12 +61,16 @@ jobs:
         working-directory: development
         env:
           VITE_APP_ENV: development
+          VITE_BLOG_MEDIA_BASE: /bde-web/blog-media/
         run: npm run build -- --base=/bde-web/dev/
 
-      - name: Add development build to the Pages artifact
+      - name: Share media and assemble the Pages artifact
         run: |
-          mkdir -p production/dist/dev
-          cp -R development/dist/. production/dist/dev/
+          if [[ -f development/scripts/preparePagesArtifact.mjs ]]; then
+            node development/scripts/preparePagesArtifact.mjs production/dist development/dist
+          else
+            node production/scripts/preparePagesArtifact.mjs production/dist development/dist
+          fi
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

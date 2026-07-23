@@ -89,6 +89,11 @@ Include one clearly labeled sample named **Luke's Blog** with a **Welcome to Luk
 - Cover images, tags, search, comments, and pagination
 - A separate trainer registry created solely for blogs
 
+The repository's later **Luke's Journey** archive is a deliberate exception to
+the original cover-image decision: imported Instagram posts may include a
+validated media gallery and use its first image as the listing cover. Other
+blogs remain text-only unless their metadata explicitly supplies media.
+
 ## Validation expectations
 
 Add tests appropriate to BDE-web for navigation, listings, post ordering and metadata, Markdown rendering, breadcrumbs, direct links, invalid slugs, malformed metadata, and missing Markdown references. Confirm the production build and the repository's standard type, lint, and test checks before publishing.

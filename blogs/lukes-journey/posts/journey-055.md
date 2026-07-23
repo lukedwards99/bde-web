@@ -1,0 +1,1 @@
+“When a man struts around like a peacock, acting like mister big stuff, he should keep his promises, even if it kills him” -Mike Guy (Naruto) 9.5 weeks out. This diet is starting to get a bit more difficult, but we are still holding strong. #nofilter

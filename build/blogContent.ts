@@ -1,9 +1,10 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import path from 'node:path'
-import type { Blog, BlogPost } from '../src/blogTypes'
+import type { Blog, BlogPost, BlogPostMedia } from '../src/blogTypes'
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/
+const MEDIA_PATH_PATTERN = /^blog-media\/[a-z0-9-]+\/[a-z0-9-]+\/[a-f0-9]{16}\.(?:webp|mp4)$/
 
 const describePath = (filePath: string, rootDirectory: string) =>
   path.relative(rootDirectory, filePath) || path.basename(filePath)
@@ -161,6 +162,60 @@ export const loadBlogContent = (projectRoot: string): Blog[] => {
           issues,
         )
 
+        let media: BlogPostMedia[] | undefined
+        if (postMetadata.media !== undefined) {
+          if (!Array.isArray(postMetadata.media) || postMetadata.media.length === 0) {
+            issues.push(
+              `${describePath(postMetadataPath, projectRoot)}: "media" must be a non-empty array`,
+            )
+          } else {
+            const parsedMedia: BlogPostMedia[] = []
+
+            postMetadata.media.forEach((item, index) => {
+              const itemPath = `${describePath(postMetadataPath, projectRoot)}: media[${index}]`
+              if (!item || typeof item !== 'object' || Array.isArray(item)) {
+                issues.push(`${itemPath} must be an object`)
+                return
+              }
+
+              const record = item as Record<string, unknown>
+              const type = record.type
+              const mediaPath = record.path
+              const alt = record.alt
+
+              if (type !== 'image' && type !== 'video') {
+                issues.push(`${itemPath}.type must be "image" or "video"`)
+                return
+              }
+              if (typeof mediaPath !== 'string' || !MEDIA_PATH_PATTERN.test(mediaPath)) {
+                issues.push(`${itemPath}.path must be a safe content-hashed blog-media path`)
+                return
+              }
+              if (
+                (type === 'image' && !mediaPath.endsWith('.webp'))
+                || (type === 'video' && !mediaPath.endsWith('.mp4'))
+              ) {
+                issues.push(`${itemPath}.path extension must match its media type`)
+                return
+              }
+              if (typeof alt !== 'string' || !alt.trim()) {
+                issues.push(`${itemPath}.alt must be a non-empty string`)
+                return
+              }
+
+              const publicPath = path.join(projectRoot, 'public', ...mediaPath.split('/'))
+              if (!existsSync(publicPath) || !statSync(publicPath).isFile()) {
+                issues.push(`${itemPath}.path references missing public asset "${mediaPath}"`)
+                return
+              }
+
+              parsedMedia.push({ type, path: mediaPath, alt: alt.trim() })
+            })
+
+            if (parsedMedia.length === postMetadata.media.length) media = parsedMedia
+          }
+        }
+
         if (publishedDate && !isRealDate(publishedDate)) {
           issues.push(
             `${describePath(postMetadataPath, projectRoot)}: publishedDate must be a real date in YYYY-MM-DD format`,
@@ -193,6 +248,7 @@ export const loadBlogContent = (projectRoot: string): Blog[] => {
             summary,
             publishedDate,
             content,
+            ...(media ? { media } : {}),
           })
         }
       }
