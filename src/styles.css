@@ -922,30 +922,189 @@ footer p:last-child {
   white-space: nowrap;
 }
 
-.load-more {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding-top: 3rem;
+.archive-search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem 1rem;
+  align-items: end;
+  margin-bottom: 2rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid rgba(107, 31, 50, 0.25);
+  background: rgba(243, 223, 228, 0.45);
 }
 
-.load-more .button {
+.archive-search label {
+  grid-column: 1 / -1;
+  color: var(--deep-maroon);
+  font-family: 'Anton', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.archive-search-field {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+
+.archive-search input {
+  width: 100%;
+  min-width: 0;
+  min-height: 3.25rem;
+  padding: 0.8rem 8.5rem 0.8rem 1rem;
+  border: 1px solid rgba(107, 31, 50, 0.45);
+  border-radius: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font: inherit;
+}
+
+.archive-search input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.archive-search input::placeholder {
+  color: var(--muted);
+  opacity: 0.85;
+}
+
+.archive-search input:focus-visible {
+  border-color: var(--crimson);
+  outline: 3px solid rgba(193, 18, 47, 0.2);
+  outline-offset: 2px;
+}
+
+.archive-search-field button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  padding-inline: 1rem;
   border: 0;
+  color: var(--maroon);
+  background: transparent;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   cursor: pointer;
 }
 
-.load-more .button span {
-  margin-left: 0.65rem;
+.archive-search-field button:hover {
+  color: var(--crimson);
 }
 
-.load-more p {
+.archive-search-field button:focus-visible {
+  outline: 3px solid var(--crimson);
+  outline-offset: -4px;
+}
+
+.archive-search > p,
+.pagination-summary {
   margin: 0;
   color: var(--muted);
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.09em;
   text-transform: uppercase;
+}
+
+.archive-search > p {
+  padding-bottom: 1.15rem;
+  white-space: nowrap;
+}
+
+.archive-results {
+  scroll-margin-top: 2rem;
+}
+
+.archive-results:focus {
+  outline: none;
+}
+
+.search-empty {
+  padding: clamp(2rem, 5vw, 4rem);
+  border: 1px solid rgba(107, 31, 50, 0.25);
+  background: rgba(243, 223, 228, 0.45);
+}
+
+.search-empty h2 {
+  margin-bottom: 1.25rem;
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  line-height: 1;
+}
+
+.search-empty > p:last-child {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.archive-pagination {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding-top: 3rem;
+}
+
+.archive-pagination nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.archive-pagination ol {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.archive-pagination a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.65rem;
+  border: 1px solid rgba(107, 31, 50, 0.35);
+  color: var(--maroon);
+  background: var(--paper);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.archive-pagination a:hover,
+.archive-pagination a[aria-current='page'] {
+  border-color: var(--crimson);
+  color: var(--paper);
+  background: var(--crimson);
+}
+
+.archive-pagination a:focus-visible {
+  outline: 3px solid var(--crimson);
+  outline-offset: 3px;
+}
+
+.archive-pagination .pagination-direction {
+  gap: 0.5rem;
+  padding-inline: 1rem;
+}
+
+.pagination-ellipsis {
+  min-width: 1.5rem;
+  color: var(--muted);
+  text-align: center;
 }
 
 .empty-state {
@@ -1261,6 +1420,33 @@ footer p:last-child {
 
   .content-page {
     width: min(100% - 2rem, 1240px);
+  }
+
+  .archive-search {
+    grid-template-columns: 1fr;
+  }
+
+  .archive-search > p {
+    padding-bottom: 0;
+    white-space: normal;
+  }
+
+  .archive-search input {
+    padding-right: 7.5rem;
+  }
+
+  .archive-pagination nav {
+    gap: 0.5rem;
+  }
+
+  .archive-pagination .pagination-direction {
+    flex: 1 1 8rem;
+  }
+
+  .archive-pagination ol {
+    order: -1;
+    flex-basis: 100%;
+    justify-content: center;
   }
 
   .blog-grid,

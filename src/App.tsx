@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom'
+import { useEffect, useMemo, useRef } from 'react'
+import { Link, Route, Routes, useLocation, useParams, useSearchParams } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import blogContent from 'virtual:bde-blogs'
@@ -62,6 +62,27 @@ const formatDate = (date: string) => new Intl.DateTimeFormat('en-US', {
   day: 'numeric',
   timeZone: 'UTC',
 }).format(new Date(`${date}T00:00:00Z`))
+
+const postsPerPage = 12
+
+const paginationItems = (currentPage: number, totalPages: number) => {
+  const pages = [...new Set([
+    1,
+    totalPages,
+    currentPage - 1,
+    currentPage,
+    currentPage + 1,
+  ])]
+    .filter((page) => page >= 1 && page <= totalPages)
+    .sort((first, second) => first - second)
+
+  return pages.flatMap<(number | string)>((page, index) => {
+    const previousPage = pages[index - 1]
+    return previousPage && page - previousPage > 1
+      ? [`ellipsis-${previousPage}`, page]
+      : [page]
+  })
+}
 
 const blogMediaBase = (
   import.meta.env.VITE_BLOG_MEDIA_BASE?.trim()
@@ -352,19 +373,77 @@ function Breadcrumbs({ blog, post }: { blog?: Blog; post?: BlogPost }) {
 
 function BlogPage({ blogs }: { blogs: Blog[] }) {
   const { blogSlug } = useParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const blog = blogs.find((item) => item.slug === blogSlug)
-  const [visiblePostCount, setVisiblePostCount] = useState(12)
+  const resultsRef = useRef<HTMLDivElement>(null)
+  const rawQuery = searchParams.get('q') ?? ''
+  const query = rawQuery.trim()
+  const normalizedQuery = query.toLocaleLowerCase('en-US')
+  const filteredPosts = useMemo(() => {
+    if (!blog || !normalizedQuery) return blog?.posts ?? []
+
+    return blog.posts.filter((post) =>
+      post.title.toLocaleLowerCase('en-US').includes(normalizedQuery)
+      || post.summary.toLocaleLowerCase('en-US').includes(normalizedQuery))
+  }, [blog, normalizedQuery])
+  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / postsPerPage))
+  const rawPage = searchParams.get('page')
+  const requestedPage = rawPage && /^[1-9]\d*$/.test(rawPage)
+    ? Number(rawPage)
+    : 1
+  const currentPage = Math.min(requestedPage, totalPages)
+  const previousPageRef = useRef(currentPage)
   usePageTitle(blog ? `${blog.title} | BDE P.T.` : 'Blog not found | BDE P.T.')
 
   useEffect(() => {
-    setVisiblePostCount(12)
-  }, [blogSlug])
+    if (rawPage === null) return
+
+    const canonicalPage = currentPage > 1 ? String(currentPage) : null
+    if (rawPage === canonicalPage) return
+
+    const nextParams = new URLSearchParams(searchParams)
+    if (canonicalPage) nextParams.set('page', canonicalPage)
+    else nextParams.delete('page')
+    setSearchParams(nextParams, { replace: true })
+  }, [currentPage, rawPage, searchParams, setSearchParams])
+
+  useEffect(() => {
+    if (previousPageRef.current !== currentPage) {
+      resultsRef.current?.scrollIntoView({ block: 'start' })
+      previousPageRef.current = currentPage
+    }
+  }, [currentPage])
 
   if (!blog) {
     return <NotFoundPage kind="blog" />
   }
 
-  const visiblePosts = blog.posts.slice(0, visiblePostCount)
+  const firstPostIndex = (currentPage - 1) * postsPerPage
+  const visiblePosts = filteredPosts.slice(firstPostIndex, firstPostIndex + postsPerPage)
+  const resultStart = filteredPosts.length > 0 ? firstPostIndex + 1 : 0
+  const resultEnd = firstPostIndex + visiblePosts.length
+  const pageItems = paginationItems(currentPage, totalPages)
+  const searchId = `post-search-${blog.slug}`
+
+  const archiveLocation = (page: number) => {
+    const params = new URLSearchParams()
+    if (rawQuery) params.set('q', rawQuery)
+    if (page > 1) params.set('page', String(page))
+    const search = params.toString()
+
+    return {
+      pathname: `/blogs/${blog.slug}`,
+      search: search ? `?${search}` : '',
+    }
+  }
+
+  const updateSearch = (value: string) => {
+    const nextParams = new URLSearchParams(searchParams)
+    if (value) nextParams.set('q', value)
+    else nextParams.delete('q')
+    nextParams.delete('page')
+    setSearchParams(nextParams, { replace: true })
+  }
 
   return (
     <main className="content-page">
@@ -376,49 +455,102 @@ function BlogPage({ blogs }: { blogs: Blog[] }) {
       />
       {blog.posts.length > 0 ? (
         <>
-          <div className="post-list" aria-label={`Posts from ${blog.title}`}>
-            {visiblePosts.map((post) => {
-              const cover = post.media?.[0]
-              const postUrl = `/blogs/${blog.slug}/${post.slug}`
+          <section className="archive-search" aria-labelledby={`${searchId}-label`}>
+            <label id={`${searchId}-label`} htmlFor={searchId}>Search this blog</label>
+            <div className="archive-search-field">
+              <input
+                id={searchId}
+                type="search"
+                value={rawQuery}
+                onChange={(event) => updateSearch(event.target.value)}
+                placeholder="Search titles and summaries"
+              />
+              {rawQuery && (
+                <button type="button" onClick={() => updateSearch('')}>
+                  Clear search
+                </button>
+              )}
+            </div>
+            <p aria-live="polite">
+              {query
+                ? `${filteredPosts.length} ${filteredPosts.length === 1 ? 'post' : 'posts'} found`
+                : `${blog.posts.length} ${blog.posts.length === 1 ? 'post' : 'posts'}`}
+            </p>
+          </section>
+          <div ref={resultsRef} className="archive-results" tabIndex={-1}>
+            {filteredPosts.length > 0 ? (
+              <div className="post-list" aria-label={`Posts from ${blog.title}`}>
+                {visiblePosts.map((post) => {
+                  const cover = post.media?.[0]
+                  const postUrl = `/blogs/${blog.slug}/${post.slug}`
 
-              return (
-                <article
-                  className={`post-card${cover ? ' post-card-with-cover' : ''}`}
-                  key={post.slug}
-                >
-                  {cover && (
-                    <Link className="post-cover" to={postUrl} tabIndex={-1} aria-hidden="true">
-                      <img
-                        src={blogMediaUrl(cover.path)}
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                      />
+                  return (
+                    <article
+                      className={`post-card${cover ? ' post-card-with-cover' : ''}`}
+                      key={post.slug}
+                    >
+                      {cover && (
+                        <Link className="post-cover" to={postUrl} tabIndex={-1} aria-hidden="true">
+                          <img
+                            src={blogMediaUrl(cover.path)}
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </Link>
+                      )}
+                      <time dateTime={post.publishedDate}>{formatDate(post.publishedDate)}</time>
+                      <h2><Link to={postUrl}>{post.title}</Link></h2>
+                      <p>{post.summary}</p>
+                      <Link className="text-link" to={postUrl}>
+                        Read article <span aria-hidden="true">→</span>
+                      </Link>
+                    </article>
+                  )
+                })}
+              </div>
+            ) : (
+              <section className="search-empty" aria-labelledby="search-empty-title">
+                <p className="eyebrow">Try another search</p>
+                <h2 id="search-empty-title">No posts found.</h2>
+                <p>No titles or summaries match “{query}”.</p>
+              </section>
+            )}
+          </div>
+          {filteredPosts.length > 0 && (
+            <div className="archive-pagination">
+              <p className="pagination-summary" aria-live="polite">
+                Showing {resultStart}–{resultEnd} of {filteredPosts.length} posts
+              </p>
+              {totalPages > 1 && (
+                <nav aria-label="Blog post pages">
+                  {currentPage > 1 && (
+                    <Link className="pagination-direction" to={archiveLocation(currentPage - 1)}>
+                      <span aria-hidden="true">←</span> Previous
                     </Link>
                   )}
-                  <time dateTime={post.publishedDate}>{formatDate(post.publishedDate)}</time>
-                  <h2><Link to={postUrl}>{post.title}</Link></h2>
-                  <p>{post.summary}</p>
-                  <Link className="text-link" to={postUrl}>
-                    Read article <span aria-hidden="true">→</span>
-                  </Link>
-                </article>
-              )
-            })}
-          </div>
-          {visiblePostCount < blog.posts.length && (
-            <div className="load-more">
-              <button
-                className="button"
-                type="button"
-                onClick={() => setVisiblePostCount((count) => count + 12)}
-              >
-                Load more
-                <span aria-hidden="true">↓</span>
-              </button>
-              <p aria-live="polite">
-                Showing {visiblePosts.length} of {blog.posts.length} posts
-              </p>
+                  <ol>
+                    {pageItems.map((item) => typeof item === 'number' ? (
+                      <li key={item}>
+                        <Link
+                          to={archiveLocation(item)}
+                          aria-label={`Page ${item}`}
+                          aria-current={item === currentPage ? 'page' : undefined}
+                        >
+                          {item}
+                        </Link>
+                      </li>
+                    ) : (
+                      <li className="pagination-ellipsis" aria-hidden="true" key={item}>…</li>
+                    ))}
+                  </ol>
+                  {currentPage < totalPages && (
+                    <Link className="pagination-direction" to={archiveLocation(currentPage + 1)}>
+                      Next <span aria-hidden="true">→</span>
+                    </Link>
+                  )}
+                </nav>
+              )}
             </div>
           )}
         </>

@@ -1,6 +1,6 @@
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter, useLocation } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
 import App from '../App'
 import type { Blog } from '../blogTypes'
@@ -41,11 +41,26 @@ const blogs: Blog[] = [{
   }],
 }]
 
+const LocationProbe = () => {
+  const location = useLocation()
+  return <output data-testid="location">{`${location.pathname}${location.search}`}</output>
+}
+
 const renderAt = (path: string, content: Blog[] = blogs) => render(
   <MemoryRouter initialEntries={[path]}>
     <App blogs={content} />
+    <LocationProbe />
   </MemoryRouter>,
 )
+
+const makePosts = (count: number) => Array.from({ length: count }, (_, index) => ({
+  ...blogs[0].posts[0],
+  slug: `post-${index + 1}`,
+  title: `Journey ${index + 1}`,
+  summary: `Training notes for entry ${index + 1}.`,
+  publishedDate: `2026-${String(12 - Math.floor(index / 28)).padStart(2, '0')}-${String(28 - (index % 28)).padStart(2, '0')}`,
+  media: undefined,
+}))
 
 describe('blog routes', () => {
   it('prominently links Luke and Kyle to Instagram from the homepage', () => {
@@ -119,26 +134,109 @@ describe('blog routes', () => {
     )
   })
 
-  it('reveals long blog archives twelve posts at a time', async () => {
+  it('paginates long blog archives twelve posts at a time', async () => {
     const user = userEvent.setup()
-    const posts = Array.from({ length: 13 }, (_, index) => ({
-      ...blogs[0].posts[0],
-      slug: `post-${index + 1}`,
-      title: `Journey ${index + 1}`,
-      publishedDate: `2026-07-${String(13 - index).padStart(2, '0')}`,
-      media: undefined,
-    }))
+    const posts = makePosts(25)
 
     renderAt('/blogs/lukes-blog', [{ ...blogs[0], posts }])
 
     expect(screen.getByRole('heading', { name: 'Journey 12' })).toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: 'Journey 13' })).not.toBeInTheDocument()
-    expect(screen.getByText('Showing 12 of 13 posts')).toBeInTheDocument()
+    expect(screen.getByText('Showing 1–12 of 25 posts')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Page 1' })).toHaveAttribute('aria-current', 'page')
+    expect(screen.queryByRole('link', { name: /Previous/ })).not.toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: /Load more/ }))
+    await user.click(screen.getByRole('link', { name: 'Page 2' }))
 
     expect(screen.getByRole('heading', { name: 'Journey 13' })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: /Load more/ })).not.toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Journey 24' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Journey 12' })).not.toBeInTheDocument()
+    expect(screen.getByText('Showing 13–24 of 25 posts')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Page 2' })).toHaveAttribute('aria-current', 'page')
+    expect(screen.getByRole('link', { name: /Previous/ })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('link', { name: /Next/ }))
+
+    expect(screen.getByRole('heading', { name: 'Journey 25' })).toBeInTheDocument()
+    expect(screen.getByText('Showing 25–25 of 25 posts')).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /Next/ })).not.toBeInTheDocument()
+  })
+
+  it('supports direct page links and normalizes invalid or out-of-range pages', async () => {
+    const posts = makePosts(25)
+    const content = [{ ...blogs[0], posts }]
+    const { unmount } = renderAt('/blogs/lukes-blog?page=2', content)
+
+    expect(screen.getByRole('heading', { name: 'Journey 13' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Page 2' })).toHaveAttribute('aria-current', 'page')
+    expect(screen.getByRole('link', { name: /Next/ })).toHaveAttribute(
+      'href',
+      '/blogs/lukes-blog?page=3',
+    )
+    unmount()
+
+    const invalid = renderAt('/blogs/lukes-blog?page=not-a-page', content)
+    await waitFor(() => {
+      expect(screen.getByTestId('location')).toHaveTextContent('/blogs/lukes-blog')
+    })
+    expect(screen.getByRole('link', { name: 'Page 1' })).toHaveAttribute('aria-current', 'page')
+    invalid.unmount()
+
+    renderAt('/blogs/lukes-blog?page=999', content)
+    await waitFor(() => {
+      expect(screen.getByTestId('location')).toHaveTextContent('/blogs/lukes-blog?page=3')
+    })
+    expect(screen.getByRole('heading', { name: 'Journey 25' })).toBeInTheDocument()
+  })
+
+  it('searches titles and summaries case-insensitively and can clear the query', async () => {
+    const user = userEvent.setup()
+    const posts = makePosts(15)
+    posts[0].title = 'Strength Foundations'
+    posts[0].summary = 'Build a reliable base.'
+    posts[1].summary = 'Practical nutrition habits.'
+
+    renderAt('/blogs/lukes-blog?page=2', [{ ...blogs[0], posts }])
+    const search = screen.getByRole('searchbox', { name: 'Search this blog' })
+
+    await user.type(search, 'STRENGTH')
+
+    expect(screen.getByText('1 post found')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Strength Foundations' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Journey 15' })).not.toBeInTheDocument()
+    expect(screen.getByTestId('location')).toHaveTextContent('/blogs/lukes-blog?q=STRENGTH')
+
+    await user.clear(search)
+    await user.type(search, 'nutrition')
+
+    expect(screen.getByRole('heading', { name: 'Journey 2' })).toBeInTheDocument()
+    expect(screen.getByText('1 post found')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Clear search' }))
+
+    expect(search).toHaveValue('')
+    expect(screen.getByText('15 posts')).toBeInTheDocument()
+    expect(screen.getByTestId('location')).toHaveTextContent('/blogs/lukes-blog')
+  })
+
+  it('preserves search terms while paging and shows an accessible no-results state', async () => {
+    const user = userEvent.setup()
+    const posts = makePosts(25)
+    renderAt('/blogs/lukes-blog?q=journey&page=2', [{ ...blogs[0], posts }])
+
+    expect(screen.getByRole('link', { name: /Next/ })).toHaveAttribute(
+      'href',
+      '/blogs/lukes-blog?q=journey&page=3',
+    )
+    expect(screen.getByRole('link', { name: 'Page 2' })).toHaveAttribute('aria-current', 'page')
+
+    const search = screen.getByRole('searchbox', { name: 'Search this blog' })
+    await user.clear(search)
+    await user.type(search, 'does not exist')
+
+    expect(screen.getByRole('heading', { name: 'No posts found.' })).toBeInTheDocument()
+    expect(screen.getByText('0 posts found')).toBeInTheDocument()
+    expect(screen.queryByRole('navigation', { name: 'Blog post pages' })).not.toBeInTheDocument()
   })
 
   it('shows useful empty states for no blogs and no posts', () => {
