@@ -48,6 +48,32 @@ const renderAt = (path: string, content: Blog[] = blogs) => render(
 )
 
 describe('blog routes', () => {
+  it('prominently links Luke and Kyle to Instagram from the homepage', () => {
+    renderAt('/')
+
+    const lukeLinks = screen.getAllByRole('link', {
+      name: 'Visit Luke Edwards on Instagram (@lwe_fitness)',
+    })
+    const kyleLinks = screen.getAllByRole('link', {
+      name: 'Visit Kyle Douglas on Instagram (@kyle_pumps_iron)',
+    })
+
+    expect(screen.getByRole('heading', { name: 'Follow the founders.' })).toBeInTheDocument()
+    expect(lukeLinks).toHaveLength(2)
+    expect(kyleLinks).toHaveLength(2)
+    lukeLinks.forEach((link) => {
+      expect(link).toHaveAttribute('href', 'https://www.instagram.com/lwe_fitness/')
+      expect(link).toHaveAttribute('target', '_blank')
+      expect(link).toHaveAttribute('rel', 'noreferrer')
+    })
+    kyleLinks.forEach((link) => {
+      expect(link).toHaveAttribute('href', 'https://www.instagram.com/kyle_pumps_iron/')
+      expect(link).toHaveAttribute('target', '_blank')
+      expect(link).toHaveAttribute('rel', 'noreferrer')
+    })
+    expect(screen.queryByRole('link', { name: /Andrew Buckwinkler on Instagram/ })).not.toBeInTheDocument()
+  })
+
   it('links to the alphabetized blog listing from the primary navigation', async () => {
     const user = userEvent.setup()
     renderAt('/')

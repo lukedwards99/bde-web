@@ -18,6 +18,10 @@ const trainers = [
     alt: 'Luke Edwards competing on a bodybuilding stage',
     specialties: ['Strength training', 'Bodybuilding', 'Nutrition'],
     bio: 'Luke brings years of bodybuilding and strength-training experience to every session. His coaching combines proven training principles with practical guidance to help clients build muscle, gain strength, and create results that last.',
+    instagram: {
+      handle: '@lwe_fitness',
+      url: 'https://www.instagram.com/lwe_fitness/',
+    },
   },
   {
     name: 'Kyle Douglas',
@@ -26,6 +30,10 @@ const trainers = [
     alt: 'Kyle Douglas showing his athletic physique',
     specialties: ['Athletic performance', 'Body composition', 'Functional training'],
     bio: 'Kyle creates personal training plans that meet each client where they are. His experience in bodybuilding and athletic performance, paired with a motivating and detail-focused approach, helps clients keep moving forward.',
+    instagram: {
+      handle: '@kyle_pumps_iron',
+      url: 'https://www.instagram.com/kyle_pumps_iron/',
+    },
   },
   {
     name: 'Andrew Buckwinkler',
@@ -34,6 +42,7 @@ const trainers = [
     alt: 'Andrew Buckwinkler',
     specialties: ['Weight loss', 'Sustainable habits', 'Personalized programs'],
     bio: 'Andrew specializes in weight loss, bringing both professional expertise and real-life experience to his coaching. In 2018, he weighed over 300 lbs and transformed his health by setting realistic goals, building sustainable workouts, and learning how differently every body functions. That journey drives his passion for helping others achieve lasting results through personalized programs and sustainable, long-term change.',
+    instagram: undefined,
   },
 ]
 
@@ -61,6 +70,21 @@ const blogMediaBase = (
 
 const blogMediaUrl = (mediaPath: string) =>
   `${blogMediaBase}${mediaPath.replace(/^blog-media\//, '')}`
+
+function InstagramIcon() {
+  return (
+    <svg
+      className="instagram-icon"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4.25" />
+      <circle className="instagram-icon-dot" cx="17.4" cy="6.7" r="1" />
+    </svg>
+  )
+}
 
 function ScrollToLocation() {
   const { pathname, hash } = useLocation()
@@ -180,9 +204,52 @@ function HomePage() {
                 <ul aria-label={`${trainer.name}'s specialties`}>
                   {trainer.specialties.map((specialty) => <li key={specialty}>{specialty}</li>)}
                 </ul>
+                {trainer.instagram && (
+                  <a
+                    className="trainer-instagram"
+                    href={trainer.instagram.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Visit ${trainer.name} on Instagram (${trainer.instagram.handle})`}
+                  >
+                    <InstagramIcon />
+                    <span>{trainer.instagram.handle}</span>
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                )}
               </div>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="instagram-band section" aria-labelledby="instagram-title">
+        <div className="instagram-band-inner">
+          <div className="instagram-heading">
+            <p className="eyebrow">Train with us. Follow the journey.</p>
+            <h2 id="instagram-title">Follow the founders.</h2>
+          </div>
+          <div className="instagram-profiles">
+            {trainers.slice(0, 2).map((trainer) => (
+              trainer.instagram && (
+                <a
+                  className="instagram-profile"
+                  href={trainer.instagram.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Visit ${trainer.name} on Instagram (${trainer.instagram.handle})`}
+                  key={trainer.name}
+                >
+                  <InstagramIcon />
+                  <span className="instagram-profile-copy">
+                    <strong>{trainer.name}</strong>
+                    <span>{trainer.instagram.handle}</span>
+                  </span>
+                  <span className="instagram-profile-arrow" aria-hidden="true">↗</span>
+                </a>
+              )
+            ))}
+          </div>
         </div>
       </section>
 
