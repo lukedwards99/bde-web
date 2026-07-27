@@ -2,9 +2,9 @@ import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import { blogContentPlugin } from './build/blogContentPlugin'
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
   plugins: [react(), blogContentPlugin()],
-  base: mode === 'production' ? '/bde-web/' : '/',
+  base: '/',
   test: {
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
