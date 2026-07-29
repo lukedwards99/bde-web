@@ -1,0 +1,3 @@
+I am feeling locked in right now. Last week show gave me lots of motivation to keep the grind going strong. Weight is still around 176-7ish. I also have now registered for the course to become a NASM-CPT, following in Kyle’s footsteps. I would love to do some personal training going foward. I always see such lack of knowledge in the gym and a little can go a long way. I am not sure exactly what type of personal training I will do yet. I am thinking I would like to do online coaching but at the same time training people in person is much more rewarding. So stay tuned for the upcoming fitness empire.
+
+#nofilter

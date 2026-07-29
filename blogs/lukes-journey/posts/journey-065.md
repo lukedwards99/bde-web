@@ -1,0 +1,1 @@
+Just over 5 weeks out. Finally lost some of the bloat around the midsection. It is starting to get tough now. I am quite hungry all the time. But I am focused on staying the course. I want to be trimmed to the goddamn tree bro.

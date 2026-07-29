@@ -1,0 +1,5 @@
+“Only speak in glory, leave your baggage at home. (None of that deep shit)” - Tyler, The Creator (Big Poe)
+
+13 weeks post show. Weight is around 166ish and I am still looking lean enough to keep bulking for a bit. I am now gaining around .5 pounds a week which where I want to be. Lifts are not going up as much as they did now that the easy post show bump is over. I just have to grind even harder for each rep. I am trying to be more consistent with progressive overload. However, although I know the science and what the studies say, I personally don’t care what weight I lift. I have squated around 225-255 for 8-12 reps for the past year and my legs have blown up. Now my form is wildly better so that is a form of progressive overload. I just take each set to failure and then my last set to, as I call it, “ballistic failure”. Sure it is just another way of measuring reps in reserve but I like it more and it is clearly working. In my opinion the intensity of your training is what matters most.
+
+#nofilter

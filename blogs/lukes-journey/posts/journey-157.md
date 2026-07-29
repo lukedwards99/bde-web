@@ -1,0 +1,3 @@
+6 weeks out. Time to drop calories again unfortunately because my weight is being stubborn around 158ish. I am going to drop down to 2200 calories and make sure the cardio is going strong. I look good but I need to get a bit more off before the show. Goal is to go into show week around 152-3 so I have to get more off and we are coming up on game day. I have also decided on men’s physique for my competition. I could do classic but I feel like I would be competing to just make the top 5, but in men’s I think I have a shot to do some real damage. Also my posing just isn’t there yet for classic. Time to push.
+
+#nofilter

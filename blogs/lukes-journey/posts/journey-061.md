@@ -1,0 +1,1 @@
+“I will surpass my limits, in my own way, on my own terms!” - Vegeta (Dragon Ball Super). All about them quarter turns. I woke up this morning at a new low weight of 148.8. The plan was to step on stage at 145ish so I am a decent bit ahead. Coming up on a rest week so I will get a bit more food then. #nofilter

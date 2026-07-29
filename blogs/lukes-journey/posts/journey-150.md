@@ -1,0 +1,5 @@
+“Please don’t give me any credit. That’s how people get jaded. Please don’t nod your head, and please don’t tell me I made it. People start to get worse once they think they the greatest.” - Mac Miller (Rick’s Piano, Balloonerism)
+
+14 weeks out. Post are going to get longer because I want both lighting conditions. Weight is still at 162. I am not too worried. This is more in line with what I expected starting prep. Except my weight dropped when I was at home off my normal routine so I started low on the scale. I am getting leaner in the mirror so I am not going to push too hard yet. I am probably going to add one cardio block of 30 minutes in, instead of dropping any calories. I have to fight my anxiety to not pull back calories too quick. Daily calories are around 2600-2700. Workouts are getting juicy, vascular and I am getting good pumps. I also don’t feel fatigued at all yet (which is good I am only 2 weeks in). Overall nothing much to report. Everything is looking good, so I am going to stay the course for now and let the plan work.
+
+#nofilter

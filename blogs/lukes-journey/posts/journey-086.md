@@ -1,0 +1,1 @@
+Gooooooood morning. One day out. Straight outta bed. Looking flatter this morning with means EVEN MORE CARBS!!! I also lost 4 pounds between yesterday and today and I am now at my goal weight of 145!!!!

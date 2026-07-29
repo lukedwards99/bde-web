@@ -1,0 +1,3 @@
+Kyle and I attended the OCB spring naturals show in DeKalb this weekend. This is the first time I’ve attended a bodybuilding show just to watch and it was a good experience. I do think I would’ve held my own up there and been in contention for the win if I did compete. Which is good because we may do that show next year. In about a month, me and Kyle will be going to watch the Minneapolis OCB show. We are also discussing doing that one next year as well. Watching all this bodybuilding is getting me fired up and more locked in. Me and Kyle are also doing more posing sessions together and that is helping me improve my own imposing because I have to explain it to him in detail. Makes me think about it a bit more. My weight is currently around 177-ish.
+
+#nofilter

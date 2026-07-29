@@ -9,6 +9,7 @@ declare module 'virtual:bde-blogs' {
 
 interface ImportMetaEnv {
   readonly VITE_GOOGLE_FORM_URL?: string
+  readonly VITE_BLOG_MEDIA_BASE?: string
 }
 
 interface ImportMeta {

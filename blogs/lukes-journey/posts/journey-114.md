@@ -1,0 +1,3 @@
+“I’m sorry I live a boring life, I love peace, but war ready if the world is ready to see you bleed.” - Kendrick Lamar (6:16 in LA). The cut is almost going too well. I am eating a consistent 2700 calories and I have lost around another 2 pounds this week to put me around 7 pounds down at 170ish. I also had a low weight this week of 168 which was a bit shocking. I am losing weight, dare I say, too quickly. But I am not hungry at all. So I am just gonna keep moving forward at 2700 and assume I had a bit more bulk bloat than I thought. Maybe I can wrap the cut up early and not have to cut calories that low but I will see. Starting to see more cuts and veins coming in. Full steam ahead!
+
+#nofilter

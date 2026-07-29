@@ -1,0 +1,1 @@
+Checking in every few hours to make sure I don’t mess up the carb load. Walking a fine line here. But in general I would rather not eat enough carbs and be a bit too small but lean, than spill over and lose definition. #nofilter

@@ -1,0 +1,3 @@
+Featuring special guest @xdougie101. We are both planning on competing together next year. Most likely in the late spring early summer 2027. So we will both be bulking and cutting on a similar-ish and doing prep together as well. I will basically be coaching him and he will be coaching me. It is a nice full circle moment too because Kyle was my first lifting partner at NIU. He got me started on this path and it is awesome that he is joining me now. We do need to get his posing fixed up but he is honestly more gifted for bodybuilding than I am. I won’t let him beat me though 😜. Also, I am pretty happy with how my quarter turns are coming along. I am still not 100% sure on how I want to do my front relaxed though. I do like this particular shot though.
+
+#nofilter

@@ -1,0 +1,3 @@
+Been a while since I have done my last post. I know I talked about it in my last post but I was a bit burnt out of bodybuilding (Not lifting, I have smashed multiple PRs in the past couple weeks). I did consciously make this decision however since I this is my last chance to take any type of break from bodybuilding for over a year. Kyle (@kyle\_pumps\_iron) and I have decided our competition window will most likely be May-June of next year. The break is over however. It is time to flip the switch and start focusing on the competition window. While it is technically still the “off season” the goal is to start slowly transition into a more prep like mindset. Time to grind. Weight still has not moved I am sitting just shy of 180.
+
+#nofilter
